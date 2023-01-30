@@ -1,0 +1,7 @@
+class_names: ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
+model_path: 'models/flowers_model.h5'
+model_id_GD: '1wI2rlXFXS9uu09MeYJfaTuOlCMk_s9LR'
+image_size: [180, 180]
+image_dir: 'data/flower_photo'
+image_dir_id_GD: '1CTEg04Qi1zH2NgoQR6-pIUAt5gpHxIlI'
+visualize_layer_names: ['conv2d_6', 'conv2d_7', 'conv2d_8']
