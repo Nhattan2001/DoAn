@@ -5,12 +5,13 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 from classification import Classification
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
 
 class GUI(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title("Image Classification")
-        self.geometry('1600x1000')
+        self.geometry('1500x900')
         self.config(bg="skyblue")
 
         self.number_of_retrieval = 3
@@ -20,6 +21,15 @@ class GUI(tk.Tk):
         self.create_panel_feature_extraction()
         self.create_panel_image_retrieval()
         self.create_panel_options()
+        
+        self._init_feature_extraction_panel()
+        self._init_feature_extraction_panel()
+        self._init_image_retrieval_panel()
+        self._init_image_classification_panel()
+        self._init_feature_extraction_panel()
+        self._init_feature_extraction_panel()
+        self._init_image_retrieval_panel()
+        self._init_image_classification_panel()
 
         self.classifier = Classification()
 
@@ -107,6 +117,9 @@ class GUI(tk.Tk):
     def do_feature_extraction(self):
         figs = self.classifier.visualize_feature_map(self.image_path)
         # plt figure to tkinter
+        if hasattr(self, 'frame_feature_extraction'):
+            for i in range(len(self.frame_feature_extraction)):
+                self.frame_feature_extraction[i].get_tk_widget().destroy()
         self.frame_feature_extraction = []
         for i in range(len(figs)):
             fig = figs[i]
@@ -118,6 +131,47 @@ class GUI(tk.Tk):
             self.frame_feature_extraction.append(canvas)
         return 0
         
+    def _init_feature_extraction_panel(self):
+        self.frame_feature_extraction = []
+        logo_image = plt.imread("logos/logo-hufi-wide.png")
+        fig = plt.figure()
+        plt.imshow(logo_image)
+        fig.set_size_inches(9,3)
+        plt.axis('off')
+        # for i in range(3):
+        canvas = FigureCanvasTkAgg(fig, self.panel_feature_extraction)
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=0, column=0, columnspan=3)
+        self.frame_feature_extraction.append(canvas)
+        return 0
+    
+    def _init_image_retrieval_panel(self):
+        self.frame_image_retrievals = []
+        # for i in range(self.number_of_retrieval):
+        try:
+            img = Image.open("logos/logo-hufi-wide.png")
+            img = img.resize((270 * 3, 330), Image.Resampling.LANCZOS)
+            img = ImageTk.PhotoImage(img)
+            self.frame_image_retrievals.append(Label(self.panel_image_retrieval, image=img))
+            self.frame_image_retrievals[0].image = img        
+            self.frame_image_retrievals[0].grid(row=0, column=0, columnspan=3)
+        except:
+            pass
+    
+    def _init_image_classification_panel(self):
+        img = Image.open("logos/logo-hufi-wide.png")
+        img = img.resize((270, 330), Image.Resampling.LANCZOS)
+        img = ImageTk.PhotoImage(img)
+        if hasattr(self, 'frame_classification'):
+            self.frame_classification.destroy()
+        self.frame_classification = Label(self.panel_image, image=img)
+        self.frame_classification.pack()
+        self.frame_classification.image = img
+        
+
+        
+            
+
 if __name__ == "__main__":
     gui = GUI()
     
